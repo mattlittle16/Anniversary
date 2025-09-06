@@ -5,7 +5,7 @@ import { useCountdown } from './hooks/useCountdown';
 
 function App() {
   // Target date: September 10, 2025 at 8:00 PM EST
-  const targetDate = new Date('2024-09-10T20:00:00-04:00');
+  const targetDate = new Date('2025-09-10T20:00:00-04:00');
   const { days, hours, minutes, seconds, isComplete } = useCountdown(targetDate);
   
   const anniversaryLink = 'https://bit.ly/mbanniversary';

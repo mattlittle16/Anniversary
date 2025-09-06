@@ -1,0 +1,12 @@
+# Copy this file to terraform.tfvars and customize values
+aws_region     = "us-east-1"
+environment    = "production"
+app_name       = "anniversary-countdown"
+domain_name    = "mattandbrittney.com"
+
+# This will be set by the ECR deployment script
+# container_image = "123456789012.dkr.ecr.us-east-1.amazonaws.com/anniversary-countdown:latest"
+
+fargate_cpu    = 256
+fargate_memory = 512
+desired_count  = 1
