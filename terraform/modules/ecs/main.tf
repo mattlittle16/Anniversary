@@ -122,17 +122,23 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 # Security Group for ECS Tasks (Direct Internet Access)
+# Get CloudFront managed prefix list
+data "aws_ec2_managed_prefix_list" "cloudfront" {
+  name = "com.amazonaws.global.cloudfront.origin-facing"
+}
+
+# Security Group for ECS Tasks (CloudFront only)
 resource "aws_security_group" "ecs_tasks" {
   name        = "${var.app_name}-${var.environment}-ecs-tasks-sg"
-  description = "Security group for ECS tasks with direct internet access"
+  description = "Security group for ECS tasks accessible only from CloudFront"
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "HTTP from anywhere"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    description     = "HTTP from CloudFront only"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    prefix_list_ids = [data.aws_ec2_managed_prefix_list.cloudfront.id]
   }
 
   egress {
@@ -145,6 +151,10 @@ resource "aws_security_group" "ecs_tasks" {
   tags = {
     Name = "${var.app_name}-${var.environment}-ecs-tasks-sg"
     Application = "anniversary-app"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 

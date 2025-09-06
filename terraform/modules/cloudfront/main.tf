@@ -73,7 +73,7 @@ resource "aws_cloudfront_origin_access_control" "main" {
 # CloudFront Distribution
 resource "aws_cloudfront_distribution" "main" {
   origin {
-    domain_name = "fargate-placeholder.example.com"  # Will be updated after Fargate deployment
+    domain_name = "fargate.${var.domain_name}"  # Points to fargate subdomain
     origin_id   = "fargate-origin"
     
     custom_origin_config {
