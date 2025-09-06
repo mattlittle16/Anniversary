@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  anniversary-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anniversary-countdown
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.anniversary.rule=Host(`localhost`)"
+      - "traefik.http.services.anniversary.loadbalancer.server.port=80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  default:
+    name: anniversary-network
